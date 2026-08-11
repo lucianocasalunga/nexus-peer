@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  macOS launchd agent para o Nexus Super Peer.
+  Instalar em ~/Library/LaunchAgents/ e: launchctl load -w ~/Library/LaunchAgents/app.libernet.nexus-peer.plist
+-->
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>app.libernet.nexus-peer</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/usr/local/bin/nexus-peer</string>
+  </array>
+  <key>RunAtLoad</key>
+  <true/>
+  <key>KeepAlive</key>
+  <true/>
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>NEXUS_URL</key>
+    <string>wss://nexus.libernet.app</string>
+    <!-- <key>PUBLIC_KEY</key><string>sua_pubkey_hex</string> -->
+  </dict>
+  <key>StandardOutPath</key>
+  <string>/tmp/nexus-peer.log</string>
+  <key>StandardErrorPath</key>
+  <string>/tmp/nexus-peer.err</string>
+</dict>
+</plist>

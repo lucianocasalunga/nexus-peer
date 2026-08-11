@@ -1,0 +1,38 @@
+{
+  "name": "nexus-peer",
+  "version": "1.0.0",
+  "description": "Nexus P2P Super Peer — headless cross-platform daemon (Linux/Windows/macOS). WebRTC via node-datachannel.",
+  "main": "src/index.js",
+  "bin": {
+    "nexus-peer": "src/index.js"
+  },
+  "scripts": {
+    "start": "node src/index.js",
+    "build:linux": "pkg . -t node20-linux-x64 -o dist/nexus-peer-linux-x64 --compress GZip",
+    "build:win": "pkg . -t node20-win-x64 -o dist/nexus-peer-win-x64.exe --compress GZip",
+    "build:macos": "pkg . -t node20-macos-x64 -o dist/nexus-peer-macos-x64 --compress GZip"
+  },
+  "pkg": {
+    "assets": [
+      "node_modules/node-datachannel/**/*.node"
+    ],
+    "outputPath": "dist"
+  },
+  "keywords": [
+    "nostr",
+    "nexus",
+    "p2p",
+    "webrtc",
+    "super-peer",
+    "nip-nx"
+  ],
+  "author": "Luciano Casalunga (Barak) — LiberNet",
+  "license": "MIT",
+  "dependencies": {
+    "node-datachannel": "^0.32.1",
+    "ws": "^8.20.0"
+  },
+  "devDependencies": {
+    "@yao-pkg/pkg": "^6.22.0"
+  }
+}

@@ -1,0 +1,15 @@
+node_modules/
+dist/
+.env
+.env.*
+!.env.example
+# memória/planos/auditorias internos — NUNCA públicos (Cláusula 005 / GITHUB_SECURITY_POLICY)
+MEMORIA*.md
+PLANO*.md
+AUDITORIA*.md
+*_INTERNO*
+*.bak
+*.bak*
+# artefatos de build/cache
+.pkg-cache/
+*.log

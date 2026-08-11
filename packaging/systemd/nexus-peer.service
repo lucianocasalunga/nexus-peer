@@ -1,0 +1,28 @@
+[Unit]
+Description=Nexus P2P Super Peer
+Documentation=https://github.com/lucianocasalunga/nexus-relay
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+# Coloque o binário em /usr/local/bin/nexus-peer (chmod +x)
+ExecStart=/usr/local/bin/nexus-peer
+Restart=always
+RestartSec=5
+# --- Configuração (opcional) ---
+Environment=NEXUS_URL=wss://nexus.libernet.app
+# Sua identidade Nostr (64 hex) — liga reputação/recompensa em sats à SUA chave:
+# Environment=PUBLIC_KEY=<sua_pubkey_hex>
+# Environment=LIGHTNING_ADDRESS=voce@dominio
+Environment=PEER_BANDWIDTH=100
+Environment=PEER_STORAGE=5000
+# --- Endurecimento ---
+DynamicUser=yes
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

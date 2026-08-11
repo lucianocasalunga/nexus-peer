@@ -1,0 +1,46 @@
+name: build-nexus-peer
+
+# Cross-OS binaries for the Nexus Super Peer daemon.
+# Each runner installs node-datachannel with ITS OWN native prebuilt (.node),
+# then packages a single executable with @yao-pkg/pkg (the maintained pkg fork).
+# Trigger manually (Actions ▸ Run workflow) or by pushing a tag `peer-v*`.
+
+on:
+  workflow_dispatch:
+  push:
+    tags: ['peer-v*']
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            target: node20-linux-x64
+            out: nexus-peer-linux-x64
+          - os: windows-latest
+            target: node20-win-x64
+            out: nexus-peer-win-x64.exe
+          - os: macos-latest
+            target: node20-macos-x64
+            out: nexus-peer-macos-x64
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      # Prod deps only → pulls node-datachannel's prebuilt .node for THIS OS.
+      - run: npm ci --omit=dev || npm install --omit=dev
+      - run: npm i -D @yao-pkg/pkg
+      - run: npx pkg . -t ${{ matrix.target }} -o dist/${{ matrix.out }} --compress GZip
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.out }}
+          path: dist/${{ matrix.out }}*
+
+  # NOTE: signing is NOT done here.
+  # - macOS: needs Apple Developer ID cert (LiberNet has one) + notarization.
+  # - Windows: needs a code-signing cert (not yet acquired) or users get SmartScreen warnings.
+  # Add signing steps once certs are wired as encrypted GitHub secrets.
