@@ -14,23 +14,33 @@ jobs:
   build:
     strategy:
       fail-fast: false
+      # Rule: the RUNNER arch must match the TARGET arch — node-datachannel's native
+      # .node is fetched for the runner's arch, and pkg embeds the base binary for the
+      # target arch. Mismatch → a binary that builds but won't run. node22 is required:
+      # pkg-fetch has no node20 Windows prebuilt, but node22 covers all 6 targets.
       matrix:
         include:
-          - os: ubuntu-latest
-            target: node20-linux-x64
+          - os: ubuntu-latest        # x64
+            target: node22-linux-x64
             out: nexus-peer-linux-x64
-          - os: windows-latest
-            target: node20-win-x64
-            out: nexus-peer-win-x64.exe
-          - os: macos-latest
-            target: node20-macos-x64
+          - os: ubuntu-24.04-arm     # arm64
+            target: node22-linux-arm64
+            out: nexus-peer-linux-arm64
+          - os: macos-13             # Intel x64
+            target: node22-macos-x64
             out: nexus-peer-macos-x64
+          - os: macos-latest         # Apple Silicon arm64
+            target: node22-macos-arm64
+            out: nexus-peer-macos-arm64
+          - os: windows-latest       # x64
+            target: node22-win-x64
+            out: nexus-peer-win-x64.exe
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
       # Prod deps only → pulls node-datachannel's prebuilt .node for THIS OS.
       # Reproducible build: npm ci (locked). NO `|| npm install` fallback (would bypass the lockfile).
       - run: npm ci --omit=dev
