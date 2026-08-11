@@ -32,7 +32,8 @@ jobs:
         with:
           node-version: 20
       # Prod deps only → pulls node-datachannel's prebuilt .node for THIS OS.
-      - run: npm ci --omit=dev || npm install --omit=dev
+      # Reproducible build: npm ci (locked). NO `|| npm install` fallback (would bypass the lockfile).
+      - run: npm ci --omit=dev
       - run: npm i -D @yao-pkg/pkg
       - run: npx pkg . -t ${{ matrix.target }} -o dist/${{ matrix.out }} --compress GZip
       - uses: actions/upload-artifact@v4
