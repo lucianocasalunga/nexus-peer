@@ -30,7 +30,7 @@
   "license": "MIT",
   "dependencies": {
     "node-datachannel": "^0.32.1",
-    "ws": "^8.20.0"
+    "ws": "^8.21.0"
   },
   "devDependencies": {
     "@yao-pkg/pkg": "^6.22.0"
